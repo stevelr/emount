@@ -38,7 +38,7 @@ Please try it out and let me know what you find. This program should be consider
 
 ### Installation
 
-- Prerequisites: Install [gocryptfs](https://github.com/rfjakob/gocryptfs), which in turn requires fuse (mac:[osxfuse](https://osxfuse.github.io/). After first-time installation of fuse, a reboot is recommended to ensure drivers are loaded.
+- Prerequisites: Install [gocryptfs](https://github.com/rfjakob/gocryptfs), which in turn requires fuse (mac:[osxfuse](https://osxfuse.github.io/)). After first-time installation of fuse, a reboot is recommended to ensure drivers are loaded.
 - Install emount
 
     ```sh
@@ -62,7 +62,7 @@ emount -r /tmp/emtest bash
         cd $EMOUNT_FOLDER
         ls
         # It's empty, since we just created the vault.
-        # Print the directory so we can check it later
+        # Print the directory path so we can check it later
         pwd
         # create a simple file
         echo hello > abc.txt
@@ -83,54 +83,9 @@ emount -r /tmp/emtest bash -c "cat \$EMOUNT_FOLDER/abc.txt"
 
 - If you want to avoid having to re-type the password, you can set it as an environment variable "EMOUNT_PASSWORD".
 
-### Joplin (linux/mac)
+### Joplin and Joplin-desktop (linux/mac)
 
-Here's an example setup for [Joplin](https://joplinapp.org/), an awesome markdown editor that runs on linux, macos, windows, and mobile apps. Joplin already encrypts notes before transmitting them to a server, but they are not encrypted on disk on your local machine. The one-line script below uses _emount_ to add local file encryption to Joplin.
-
-These instructions work for the cli program _joplin_ as well as the gui app _joplin-desktop_. Just replace 'joplin-desktop' with 'joplin' in the instructions below. The only caveat for joplin-desktop is that this works only when the app is invoked from the command-line, not when clicking the .desktop widget.
-
-- One-time data folder initialization
-
-  Shut down Joplin/Joplin-desktop before you do this, to ensure all current edits are saved.
-
-    ```sh
-    # joplin-desktop stores its data in $HOME/.config/joplin-desktop
-    # We'll use that as the mount point for decrypted data, and will put
-    # encrypted data in $HOME/.config/joplin-desktop.enc
-
-    cd $HOME/.config
-    emount --init joplin-desktop.enc --from joplin-desktop
-    # move the data to a backup location. The joplin-desktop folder must not
-    # contain data when emount runs and mounts the decrypted folder in that location.
-    mv joplin-desktop joplin-desktop.sav
-    ```
-
-- Create the script to launch the app. Instead of running joplin-desktop, you will now be running a one-line script that invokes _emount_, which mounts the decrypted volume, runs joplin-desktop, and, after joplin-desktop exits, the decrypted volume is unmounted, leaving only encrypted data on disk.
-
-  - Place the following file in `$HOME/bin/joplin-desktop`
-
-    ```sh
-    #!/bin/sh
-    emount --run $HOME/.config/joplin-desktop.enc \
-         --mount $HOME/.config/joplin-desktop \
-         /usr/bin/joplin-desktop
-    ```
-
-    If you are using macos, the path to the Joplin binary is different:
-
-    ```sh
-    #!/bin/sh
-    emount --run $HOME/.config/joplin-desktop.enc \
-         --mount $HOME/.config/joplin-desktop \
-         /Applications/Joplin.app/Contents/MacOS/Joplin
-    ```
-
-  - Make it executable: `chmod 755 $HOME/bin/joplin-desktop`
-  - Important (linux): ensure $HOME/bin is in your path before /usr/bin, so that this runs instead of the installed one.
-
-- Tip: For the greatest safety against hackers, malware, and potential data loss, don't keep joplin or joplin-desktop running all the time. During the time it's running, unencrypted data is present on your machine in $HOME/.config/joplin-desktop (a private folder), and could be read by someone with access to your physical machine or if they can access your account over a network. Risk of exposure is minimized if you get into the habit of closing the app when you aren't using it.
-
-Once you are confident that this new scheme works, you can delete the saved archive "$HOME/.config/joplin-desktop.sav", which may already be out of date if you've been editing files in the app.
+An example setup for [Joplin](https://joplinapp.org/), an awesome markdown editor, is documented in [example-joplin.md](./example-joplin.md)
 
 ## Notes
 
