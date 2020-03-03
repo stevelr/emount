@@ -163,7 +163,7 @@ func mountCrypt(cryptPath string, mountPoint string,
 
 	if mountPoint == "" {
 		mountPoint, err = ioutil.TempDir("", tmpFolderPattern)
-		fmt.Printf("mountCrypt: created %s\n", mountPoint)
+		//fmt.Printf("mountCrypt: created %s\n", mountPoint)
 		if err != nil {
 			return "", fmt.Errorf("Failed to create mount point: %v", err)
 		}
@@ -269,7 +269,6 @@ func main() {
 			fmt.Printf("ERROR: %v\n", err)
 		}
 	} else {
-		fmt.Printf("parseArgs returned no err\n")
 		if opt.init != "" {
 			if err = initCryptVol(opt.init, opt.srcFolder); err != nil {
 				fmt.Printf("ERROR: %v\n", err)
@@ -281,7 +280,6 @@ func main() {
 			}
 		}
 	}
-
 }
 
 // checkEmptyDir verifies the directory exists and is empty.
