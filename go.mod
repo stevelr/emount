@@ -1,4 +1,4 @@
-module emount
+module github.com/stevelr/emount
 
 go 1.13
 
