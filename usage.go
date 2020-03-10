@@ -66,6 +66,7 @@ func parseArgs(opt *options) error {
 	flag.StringVar(&opt.init, "i", "", "initialize a new folder (shorthand)")
 	flag.StringVar(&opt.srcFolder, "from", "", "folder to copy from")
 	flag.StringVar(&opt.srcFolder, "f", "", "folder to copy from (shorthand)")
+	flag.BoolVar(&opt.verbose, "v", false, "show progress messages")
 	flag.StringVar(&opt.mountPoint, "mount", "",
 		"mount point for decrypted content")
 	flag.StringVar(&opt.mountPoint, "m", "",

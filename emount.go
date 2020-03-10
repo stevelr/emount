@@ -20,6 +20,7 @@ type options struct {
 	srcFolder  string   // folder to copy from during initialization
 	mountPoint string   // path for mounting unencrypted data
 	runCmd     []string // command to run that accesses unencrypted data
+	verbose    bool
 }
 
 type dirCheckResponse int
@@ -218,6 +219,9 @@ func decryptAndRun(opt *options) error {
 	if err != nil {
 		return fmt.Errorf("Failed to mount: %v", err)
 	}
+	if opt.verbose {
+		fmt.Printf("Mounted %s on %s\n", opt.run, mountPoint)
+	}
 
 	// pass through caller's environment, with one additional var for folder
 	env := append(os.Environ()[:],
@@ -227,7 +231,9 @@ func decryptAndRun(opt *options) error {
 		// print error but keep going
 		fmt.Printf("Command execution error: %v\n", err)
 	}
-	//fmt.Printf("command completed, unmounting ...\n")
+	if opt.verbose {
+		fmt.Printf("Command completed\n")
+	}
 
 	// unmount
 	err = unmountVol(mountPoint)
@@ -235,10 +241,16 @@ func decryptAndRun(opt *options) error {
 		printUnmountWarning(mountPoint)
 		fmt.Printf("err=%v\n", err)
 	} else {
+		if opt.verbose {
+			fmt.Printf("Unmounting %s\n", mountPoint)
+		}
 		// The folder is unmounted. Attempt to remove the mount point if it was
 		// just created
 		if opt.mountPoint == "" {
 			_ = os.Remove(mountPoint)
+			if opt.verbose {
+				fmt.Printf("Removing directory %s\n", mountPoint)
+			}
 		}
 	}
 	return nil
