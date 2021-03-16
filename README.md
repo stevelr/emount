@@ -30,15 +30,23 @@ For automation or to avoid interactive prompting for password, the encryption pa
 
 ## Current status
 
-Tested on Linux (Arch, 5.4+ kernel) and macOS Catalina.
+Tested on Linux (Arch, 5.4+ kernel) and macOS Catalina & BigSur.
 
-Please try it out and let me know what you find. This program should be considered alpha status and should not be used for critical data unless you are making frequent backups and verifying the backups. Feedback is welcome.
+If you're getting errors on mocos BigSur related to osxfuse, you need to upgrade osxfuse (now called macfuse) and gocryptfs.
+Try `brew reinstall osxfuse`, reboot, then `brew reinstall gocryptfs`.
+
+Please try it out and let me know what you find. This program should be considered beta status. Always keep backups.
+Feedback is welcome.
 
 ## Setup and Examples
 
 ### Installation
 
-- Prerequisites: Install [gocryptfs](https://github.com/rfjakob/gocryptfs), which in turn requires fuse (mac:[osxfuse](https://osxfuse.github.io/)). After first-time installation of fuse, a reboot is recommended to ensure drivers are loaded.
+- Prerequisites: Install [gocryptfs](https://github.com/rfjakob/gocryptfs), which in turn requires fuse.
+On Mac BigSur, you need [macfuse](https://osxfuse.github.io) v4+.
+
+After installation or upgrade of fuse, reboot to ensure the drivers are loaded.
+
 - Install emount
 
     ```sh
